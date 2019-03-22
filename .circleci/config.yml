@@ -1,0 +1,67 @@
+version: 2.1
+
+orbs:
+  orb-tools: circleci/orb-tools@8.4.0
+
+# Common anchors
+only_master_branch: &only_master_branch
+  filters:
+    branches:
+      only:
+        - master
+
+workflows:
+  version: 2
+
+  check_and_publish_dev:
+    jobs:
+      - orb-tools/lint
+
+      # Gradle publish
+      - orb-tools/pack:
+          name: Pack gradle-publish
+          source-dir: gradle-publish/
+          destination-orb-path: gradle-publish-orb.yml
+          workspace-path: gradle-publish-orb.yml
+          artifact-path: gradle-publish-orb.yml
+          requires:
+            - orb-tools/lint
+      - orb-tools/publish-dev:
+          name: Publish gradle-publish dev release
+          orb-name: freeletics/gradle-publish
+          orb-path: workspace/gradle-publish-orb.yml
+          requires:
+            - "Pack gradle-publish"
+      - "Gradle-publish patch release":
+          type: approval
+          requires:
+            - "Publish gradle-publish dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish gradle-publish patch release"
+          orb-name: freeletics/gradle-publish
+          release: patch
+          requires:
+            - "Gradle-publish patch release"
+      - "Gradle-publish minor release":
+          type: approval
+          requires:
+            - "Publish gradle-publish dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish gradle-publish minor release"
+          orb-name: freeletics/gradle-publish
+          release: minor
+          requires:
+            - "Gradle-publish minor release"
+      - "Gradle-publish major release":
+          type: approval
+          requires:
+            - "Publish gradle-publish dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish gradle-publish major release"
+          orb-name: freeletics/gradle-publish
+          release: major
+          requires:
+            - "Gradle-publish major release"

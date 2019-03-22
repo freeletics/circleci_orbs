@@ -1,0 +1,7 @@
+resource_class: medium
+docker:
+  - image: openjdk:8-jdk-slim
+    environment:
+      TERM: dumb
+      JAVA_TOOL_OPTIONS: "-Xmx1536m"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Dkotlin.incremental=false"

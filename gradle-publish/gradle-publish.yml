@@ -1,0 +1,4 @@
+version: 2.1
+
+description: |
+  Publish snapshot and release artifacts singed by GPG using https://github.com/vanniktech/gradle-maven-publish-plugin Gradle plugin

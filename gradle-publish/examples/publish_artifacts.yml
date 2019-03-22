@@ -1,0 +1,16 @@
+description: "Base example how to use it"
+
+usage:
+  version: 2.1
+
+  orbs:
+    publish: freeletics/publish@1.0.0
+
+  workflows:
+    release:
+      jobs:
+        - publish/publish_artifacts:
+          filters:
+            branches:
+              only:
+                - master

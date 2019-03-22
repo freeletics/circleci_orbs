@@ -1,0 +1,11 @@
+description: Sign and publish all Gradle artifacts in the project
+
+parameters:
+  executor:
+    type: executor
+    default: openjdk
+
+executor: << parameters.executor >>
+
+steps:
+  - publish_artifacts
