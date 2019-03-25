@@ -9,10 +9,6 @@ parameters:
     type: env_var_name
     description: Gpg key name to use for signing
     default: PGP_KEY
-  working_directory:
-    type: string
-    description: Working directory
-    default: /home/circleci
   deploy_task:
     type: string
     description: Gradle task to run to build, sign and upload artifacts
@@ -33,12 +29,13 @@ steps:
 # Gradle's signing plugin isn't compatible with GPG 2.1 https://github.com/gradle/gradle/issues/888
   - run:
       name: Fixing GPG compatablity
-      command:  echo $<< parameters.gpg_key_name >> | gpg --batch --pinentry-mode=loopback --passphrase-fd 0 --export-secret-keys > << parameters.working_directory>>/.gnupg/secring.gpg
+      command:  echo $<< parameters.gpg_key_name >> | gpg --batch --pinentry-mode=loopback --passphrase-fd 0 --export-secret-keys > /home/circleci/.gnupg/secring.gpg
+  - checkout
   - run:
       name: Setting up Gradle signing
       command: |
         echo "signing.password=$<< parameters.gpg_key_name >>" >> gradle.properties
-        echo "signing.secretKeyRingFile=<< parameters.working_directory >>/.gnupg/secring.gpg" >> gradle.properties
+        echo "signing.secretKeyRingFile=/home/circleci/.gnupg/secring.gpg" >> gradle.properties
   - run:
       name: Deploy artifacts
       command: ./gradlew << parameters.deploy_task >>
