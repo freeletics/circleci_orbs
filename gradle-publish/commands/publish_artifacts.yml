@@ -30,7 +30,6 @@ steps:
   - run:
       name: Fixing GPG compatablity
       command:  echo $<< parameters.gpg_key_name >> | gpg --batch --pinentry-mode=loopback --passphrase-fd 0 --export-secret-keys > /home/circleci/.gnupg/secring.gpg
-  - checkout
   - run:
       name: Setting up Gradle signing
       command: |

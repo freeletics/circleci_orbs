@@ -20,6 +20,7 @@ parameters:
 executor: << parameters.executor >>
 
 steps:
+  - checkout
   - publish_artifacts:
       base64_key: << parameters.base64_key >>
       gpg_key_name: << parameters.gpg_key_name >>
