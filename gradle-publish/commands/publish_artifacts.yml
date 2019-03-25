@@ -21,7 +21,9 @@ parameters:
 steps:
   - run:
       name: Prepare GPG keystore file
-      command: export GPG_KEY=`mktemp`
+      command: |
+        export GPG_KEY_FILE=`mktemp`
+        echo "export GPG_KEY=$GPG_KEY_FILE" >> $BASH_ENV
   - run:
       name: Base64 decode gpg keystore to file
       command: echo $<< parameters.base64_key >> | base64 --decode > $GPG_KEY
