@@ -1,0 +1,15 @@
+parameters:
+  tag:
+    type: string
+    default: "1.0"
+  working_directory:
+    type: string
+    default: /home/circleci/repo
+resource_class: xlarge
+docker:
+  - image: freeletics/android-sdk:<< parameters.tag >>
+working_directory: << parameters.working_directory >>
+environment:
+  TERM: dumb
+  JAVA_TOOL_OPTIONS: "-Xmx11g -XX:MaxMetaspaceSize=1g -XX:MaxRAMFraction=2"
+  MAX_WORKERS: "8"
