@@ -1,0 +1,14 @@
+description: |
+  Updates git cache. Should run only on main (master) branch!
+
+parameters:
+  git_cache_version:
+    description: "Cache key (example \"v2\"). Could be used to invalidate cache."
+    type: string
+    default: "v2"
+
+executors: alpine/git
+
+steps:
+  - update-git-cache:
+      cache_version: << parameters.git_cache_version >>
