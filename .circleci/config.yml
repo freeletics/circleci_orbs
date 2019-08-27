@@ -65,3 +65,20 @@ workflows:
           release: major
           requires:
             - "Gradle-publish major release"
+
+      # Prepare mobile workflow
+            # Gradle publish
+      - orb-tools/pack:
+          name: Pack prepare-mobile-workflow
+          source-dir: prepare-mobile-workflow/
+          destination-orb-path: prepare-mobile-workflow-orb.yml
+          workspace-path: prepare-mobile-workflow-orb.yml
+          artifact-path: prepare-mobile-workflow-orb.yml
+          requires:
+            - orb-tools/lint
+      - orb-tools/publish-dev:
+          name: Publish prepare-mobile-workflow dev release
+          orb-name: freeletics/prepare-mobile-workflow
+          orb-path: workspace/prepare-mobile-workflow-orb.yml
+          requires:
+            - "Pack prepare-mobile-workflow"
