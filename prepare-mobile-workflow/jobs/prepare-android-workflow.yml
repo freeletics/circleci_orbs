@@ -30,6 +30,10 @@ parameters:
     description: "Optional steps to perform after checkout, but before saving to workspace."
     type: steps
     default: []
+  gradle_user_home:
+    description: "Path to Gradle user home directory."
+    type: string
+    default: "~/.gradle"
 
 executor: android-medium
 
@@ -52,6 +56,9 @@ steps:
       cache_version: << parameters.gradle_cache_version >>
       cache_modifier: << parameters.cache_modifier >>
       dependencies_file: << parameters.dependencies_file >>
+  - run:
+      name: Setting Gradle user home
+      command: export GRADLE_USER_HOME=<< parameters.gradle_user_home >>
   - steps: << parameters.sync_dependencies >>
   - save-android-sdk-cache:
       cache_version: << parameters.android_cache_version >>
@@ -61,3 +68,5 @@ steps:
       cache_version: << parameters.gradle_cache_version >>
       cache_modifier: << parameters.gradle_cache_modifier >>
       dependencies_file: << parameters.dependencies_file >>
+      gradle_caches_dir: << parameters.gradle_user_home >>/caches/
+      gradle_wrapper_dir: << parameters.gradle_user_home >>/wrapper/
