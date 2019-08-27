@@ -15,8 +15,8 @@ parameters:
     description: "Gradle cache key (example \"v2\"). Could be used to invalidate cache."
     type: string
     default: "v6"
-  gradle_cache_modifier:
-    description: "Optional Gradle cache modifier. Useful to create several caches for the same dependencies file."
+  cache_modifier:
+    description: "Optional caches modifier. Useful to create several caches for the same dependencies file."
     type: string
     default: ""
   dependencies_file:
@@ -41,14 +41,16 @@ steps:
         - .
   - restore-android-sdk-cache:
       cache_version: << parameters.android_cache_version >>
+      cache_modifier: << parameters.cache_modifier >>
       dependencies_file: << parameters.dependencies_file >>
   - restore-gradle-cache:
       cache_version: << parameters.gradle_cache_version >>
-      cache_modifier: << parameters.gradle_cache_modifier >>
+      cache_modifier: << parameters.cache_modifier >>
       dependencies_file: << parameters.dependencies_file >>
   - steps: << parameters.sync_dependencies >>
   - save-android-sdk-cache:
       cache_version: << parameters.android_cache_version >>
+      cache_modifier: << parameters.cache_modifier >>
       dependencies_file: << parameters.dependencies_file >>
   - save-gradle-cache:
       cache_version: << parameters.gradle_cache_version >>
