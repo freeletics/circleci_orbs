@@ -1,0 +1,14 @@
+description: "Restores previously saved installable Android SDK components."
+
+parameters:
+  cache_version:
+    description: "Cache key (example \"v2\"). Could be used to invalidate cache."
+    type: string
+  dependencies_file:
+    description: "Path to the file that defines all project dependencies and their versions."
+    type: string
+
+steps:
+  - restore_cache:
+      name: Restore android cache
+      key: << parameters.cache_version >>-android-sdk-{{ checksum << parameters.dependencies_file >> }}

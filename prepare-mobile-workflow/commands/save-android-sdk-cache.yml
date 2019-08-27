@@ -1,0 +1,17 @@
+description: "Saves into cache Android SDK installable components."
+
+parameters:
+  cache_version:
+    description: "Cache key (example \"v2\"). Could be used to invalidate cache."
+    type: string
+  dependencies_file:
+    description: "Path to the file that defines all project dependencies and their versions."
+    type: string
+
+steps:
+  - save_cache:
+      key: << parameters.cache_version >>-android-sdk-{{ checksum << parameters.dependencies_file >> }}
+      paths:
+        - $ANDROID_HOME/build-tools
+        - $ANDROID_HOME/platforms
+        - $ANDROID_HOME/platform-tools

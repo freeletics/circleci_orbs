@@ -1,0 +1,5 @@
+version: 2.1
+
+description: |
+  Provides common commands/jobs that does fast git checkout, persist project to workflow,
+  populate mobile dependencies caches if dependencies has been changed.
