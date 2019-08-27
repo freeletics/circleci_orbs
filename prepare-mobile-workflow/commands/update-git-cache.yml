@@ -8,7 +8,7 @@ parameters:
     type: string
 
 steps:
-  - checkout_from_git_cache:
+  - checkout-from-git-cache:
       cache_version: << parameters.cache_version >>
   - save_cache:
       key: << parameters.cache_version >>-git-cache-master-{{ .Revision }}
