@@ -26,6 +26,10 @@ parameters:
     description: "Steps to sync all Android and Gradle dependencies."
     type: steps
     default: []
+  post-checkout-additional-steps:
+    description: "Optional steps to perform after checkout, but before saving to workspace."
+    type: steps
+    default: []
 
 executor: android-medium
 
@@ -35,6 +39,7 @@ steps:
   - run:
       name: Removing .git folder
       command: rm -rf .git/
+  - steps: << parameters.post-checkout-additional-steps >>
   - persist_to_workspace:
       root: .
       paths:
