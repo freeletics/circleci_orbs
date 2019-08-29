@@ -7,7 +7,7 @@ parameters:
     type: string
     default: "v2"
 
-executors: alpine/git
+executor: alpine-git
 
 steps:
   - update-git-cache:
