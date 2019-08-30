@@ -35,7 +35,9 @@ parameters:
     type: string
     default: "~/.gradle"
 
-executor: android-medium
+executor:
+  name: android-medium
+  gradle_user_home: << parameters.gradle_user_home >>
 
 steps:
   - checkout-from-git-cache:
