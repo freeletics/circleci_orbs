@@ -82,3 +82,36 @@ workflows:
           orb-path: workspace/prepare-mobile-workflow-orb.yml
           requires:
             - "Pack prepare-mobile-workflow"
+      - "Prepare-mobile-workflow patch release":
+          type: approval
+          requires:
+            - "Publish prepare-mobile-workflow dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish prepare-mobile-workflow patch release"
+          orb-name: freeletics/prepare-mobile-workflow
+          release: patch
+          requires:
+            - "Prepare-mobile-workflow patch release"
+      - "Prepare-mobile-workflow minor release":
+          type: approval
+          requires:
+            - "Publish prepare-mobile-workflow dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish prepare-mobile-workflow minor release"
+          orb-name: freeletics/prepare-mobile-workflow
+          release: minor
+          requires:
+            - "Prepare-mobile-workflow minor release"
+      - "Prepare-mobile-workflow major release":
+          type: approval
+          requires:
+            - "Publish prepare-mobile-workflow dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish prepare-mobile-workflow major release"
+          orb-name: freeletics/prepare-mobile-workflow
+          release: major
+          requires:
+            - "Prepare-mobile-workflow major release"
