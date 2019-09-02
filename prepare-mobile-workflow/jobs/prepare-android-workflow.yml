@@ -58,9 +58,6 @@ steps:
       cache_version: << parameters.gradle_cache_version >>
       cache_modifier: << parameters.cache_modifier >>
       dependencies_file: << parameters.dependencies_file >>
-  - run:
-      name: Setting Gradle user home
-      command: export GRADLE_USER_HOME=<< parameters.gradle_user_home >>
   - steps: << parameters.sync_dependencies >>
   - save-android-sdk-cache:
       cache_version: << parameters.android_cache_version >>
