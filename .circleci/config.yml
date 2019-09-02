@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  orb-tools: circleci/orb-tools@8.4.0
+  orb-tools: circleci/orb-tools@8.27.4
 
 # Common anchors
 only_master_branch: &only_master_branch
@@ -65,3 +65,53 @@ workflows:
           release: major
           requires:
             - "Gradle-publish major release"
+
+      # Prepare mobile workflow
+            # Gradle publish
+      - orb-tools/pack:
+          name: Pack prepare-mobile-workflow
+          source-dir: prepare-mobile-workflow/
+          destination-orb-path: prepare-mobile-workflow-orb.yml
+          workspace-path: prepare-mobile-workflow-orb.yml
+          artifact-path: prepare-mobile-workflow-orb.yml
+          requires:
+            - orb-tools/lint
+      - orb-tools/publish-dev:
+          name: Publish prepare-mobile-workflow dev release
+          orb-name: freeletics/prepare-mobile-workflow
+          orb-path: workspace/prepare-mobile-workflow-orb.yml
+          requires:
+            - "Pack prepare-mobile-workflow"
+      - "Prepare-mobile-workflow patch release":
+          type: approval
+          requires:
+            - "Publish prepare-mobile-workflow dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish prepare-mobile-workflow patch release"
+          orb-name: freeletics/prepare-mobile-workflow
+          release: patch
+          requires:
+            - "Prepare-mobile-workflow patch release"
+      - "Prepare-mobile-workflow minor release":
+          type: approval
+          requires:
+            - "Publish prepare-mobile-workflow dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish prepare-mobile-workflow minor release"
+          orb-name: freeletics/prepare-mobile-workflow
+          release: minor
+          requires:
+            - "Prepare-mobile-workflow minor release"
+      - "Prepare-mobile-workflow major release":
+          type: approval
+          requires:
+            - "Publish prepare-mobile-workflow dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish prepare-mobile-workflow major release"
+          orb-name: freeletics/prepare-mobile-workflow
+          release: major
+          requires:
+            - "Prepare-mobile-workflow major release"

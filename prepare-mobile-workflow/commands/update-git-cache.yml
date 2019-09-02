@@ -1,0 +1,16 @@
+description: |
+  Updates existing git cache with a new git commits.
+  Should be run only on master branch!
+
+parameters:
+  cache_version:
+    description: "Cache key (example \"v2\"). Could be used to invalidate cache."
+    type: string
+
+steps:
+  - checkout-from-git-cache:
+      cache_version: << parameters.cache_version >>
+  - save_cache:
+      key: << parameters.cache_version >>-git-cache-master-{{ .Revision }}
+      paths:
+        - .git

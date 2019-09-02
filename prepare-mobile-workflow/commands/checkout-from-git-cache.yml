@@ -1,0 +1,17 @@
+description: "Restores saved on master branch git cache and checkout workflow revision."
+
+parameters:
+  cache_version:
+    description: "Cache key (example \"v2\"). Could be used to invalidate cache."
+    type: string
+
+steps:
+  - restore_cache:
+      name: Restore git cache
+      keys:
+        - << parameters.cache_version >>-git-cache-master-{{ .Revision }}
+        - << parameters.cache_version >>-git-cache-master-
+  - run:
+      name: Restoring project files
+      command: if [ -d ".git/" ]; then git checkout .; fi
+  - checkout

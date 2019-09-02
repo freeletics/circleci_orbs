@@ -1,0 +1,71 @@
+description: |
+  Prepares CI workflow for Android builds later in this workflow. Followup jobs
+  should not do any checkout, but attach workspace and restore Android and Gradle caches.
+
+parameters:
+  git_cache_version:
+    description: "Git cache key (example \"v2\"). Could be used to invalidate cache."
+    type: string
+    default: "v2"
+  android_cache_version:
+    description: "Android sdk cache key (example \"v2\"). Could be used to invalidate cache."
+    type: string
+    default: "v3"
+  gradle_cache_version:
+    description: "Gradle cache key (example \"v2\"). Could be used to invalidate cache."
+    type: string
+    default: "v6"
+  cache_modifier:
+    description: "Optional caches modifier. Useful to create several caches for the same dependencies file."
+    type: string
+    default: ""
+  dependencies_file:
+    description: "Path to the file that defines all project dependencies and their versions."
+    type: string
+  sync_dependencies:
+    description: "Steps to sync all Android and Gradle dependencies."
+    type: steps
+    default: []
+  post-checkout-additional-steps:
+    description: "Optional steps to perform after checkout, but before saving to workspace."
+    type: steps
+    default: []
+  gradle_user_home:
+    description: "Path to Gradle user home directory."
+    type: string
+    default: "~/.gradle"
+
+executor:
+  name: android-medium
+  gradle_user_home: << parameters.gradle_user_home >>
+
+steps:
+  - checkout-from-git-cache:
+      cache_version: << parameters.git_cache_version >>
+  - run:
+      name: Removing .git folder
+      command: rm -rf .git/
+  - steps: << parameters.post-checkout-additional-steps >>
+  - persist_to_workspace:
+      root: .
+      paths:
+        - .
+  - restore-android-sdk-cache:
+      cache_version: << parameters.android_cache_version >>
+      cache_modifier: << parameters.cache_modifier >>
+      dependencies_file: << parameters.dependencies_file >>
+  - restore-gradle-cache:
+      cache_version: << parameters.gradle_cache_version >>
+      cache_modifier: << parameters.cache_modifier >>
+      dependencies_file: << parameters.dependencies_file >>
+  - steps: << parameters.sync_dependencies >>
+  - save-android-sdk-cache:
+      cache_version: << parameters.android_cache_version >>
+      cache_modifier: << parameters.cache_modifier >>
+      dependencies_file: << parameters.dependencies_file >>
+  - save-gradle-cache:
+      cache_version: << parameters.gradle_cache_version >>
+      cache_modifier: << parameters.cache_modifier >>
+      dependencies_file: << parameters.dependencies_file >>
+      gradle_caches_dir: << parameters.gradle_user_home >>/caches/
+      gradle_wrapper_dir: << parameters.gradle_user_home >>/wrapper/
