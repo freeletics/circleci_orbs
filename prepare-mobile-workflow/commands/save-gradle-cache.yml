@@ -22,7 +22,7 @@ parameters:
 
 steps:
   - save_cache:
-      name: Save Gradle cache in PR
+      name: "Saving Gradle cache"
       key: << parameters.cache_version >>-<< parameters.cache_modifier >>-dependencies-{{ checksum << parameters.dependencies_file >> }}
       paths:
         - << parameters.gradle_caches_dir >>

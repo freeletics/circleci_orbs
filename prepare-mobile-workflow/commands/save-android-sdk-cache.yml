@@ -16,8 +16,10 @@ parameters:
 
 steps:
   - save_cache:
+      name: "Saving android cache"
       key: << parameters.cache_version >>-<< parameters.cache_modifier >>-android-sdk-{{ checksum << parameters.dependencies_file >> }}
       paths:
-        - $ANDROID_HOME/build-tools
-        - $ANDROID_HOME/platforms
-        - $ANDROID_HOME/platform-tools
+        # Taken from docker image ANDROID_HOME env variable
+        - ~/android-sdk/build-tools
+        - ~/android-sdk/platforms
+        - ~/android-sdk/platform-tools
