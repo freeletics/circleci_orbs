@@ -1,4 +1,4 @@
 resource_class: small
-
+working_directory: /home/circleci/repo
 docker:
   - image: alpine/git
