@@ -6,8 +6,13 @@ parameters:
     description: "Cache key (example \"v2\"). Could be used to invalidate cache."
     type: string
     default: "v2"
+  working_directory:
+    type: string
+    default: /home/circleci/repo
 
-executor: alpine-git
+executor:
+  name: alpine-git
+  working_directory: << parameters.working_directory >>
 
 steps:
   - update-git-cache:
