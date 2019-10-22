@@ -1,0 +1,21 @@
+parameters:
+  ruby_version:
+    type: string
+    default: "2.5"
+  working_directory:
+    type: string
+    default: /home/circleci/repo
+  bundler_version:
+    type: string
+    default: "2.0.2"
+  bundler_path:
+    type: string
+    default: vendor/bundle/2.5
+resource_class: small
+docker:
+  - image: circleci/ruby:<< parameters.ruby_version >>
+working_directory: << parameters.working_directory >>
+environment:
+  TERM: dumb
+  BUNDLER_VERSION: << parameters.bundler_version >>
+  BUNDLE_PATH: << parameters.bundler_path >>
