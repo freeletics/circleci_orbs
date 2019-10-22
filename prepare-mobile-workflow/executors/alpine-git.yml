@@ -1,4 +1,8 @@
+parameters:
+  working_directory:
+    type: string
+    default: /home/circleci/repo
 resource_class: small
-working_directory: /home/circleci/repo
+working_directory: << parameters.working_directory >>
 docker:
   - image: alpine/git
