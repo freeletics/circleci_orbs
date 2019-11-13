@@ -1,0 +1,39 @@
+description: |
+  Syncs installed gems and if they have missing native extension - install them.
+  Exists as a workaround for CircleCI cache could not use relative paths.
+
+parameters:
+  cache_version:
+    description: "Cache key (example \"v2\"). Could be used to invalidate cache."
+    type: string
+  native-platform:
+    description: |
+      Ruby Native platform. For example, linux 64bit will be "x86_64-linux".
+      To get your current platform, execute "bundle platform"
+    type: string
+  cache_modifier:
+    description: "Optional cache modifier. Useful to create several caches for the same dependencies file."
+    type: string
+    default: ""
+  gemlock_file:
+    description: "Path to the Gemfile.lock file that defines all gems and their versions."
+    type: string
+  bundler_path:
+    description: "Path to the bundler gems installation directory."
+    type: string
+
+steps:
+  - restore_cache:
+      name: Restore gems native extensions cache
+      key: << parameters.cache_version >>-<< parameters.cache_modifier >>-gems-extensions-<< parameters.native-platform >>-{{ checksum << parameters.gemlock_file >> }}
+  - run:
+      name: Sync extensions
+      command: |
+        if [ ! -d "<< parameters.bundler_path >>/extensions/<< parameters.native-platform >>" ]; then
+          bundle install;
+        fi
+  - save_cache:
+      name: Saves gems native extensions cache
+      key: << parameters.cache_version >>-<< parameters.cache_modifier >>-gems-extensions-<< parameters.native-platform >>-{{ checksum << parameters.gemlock_file >> }}
+      paths:
+        - << parameters.bundler_path >>/extensions/<< parameters.native-platform >>

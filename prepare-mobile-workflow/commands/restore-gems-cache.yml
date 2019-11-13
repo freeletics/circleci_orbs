@@ -1,0 +1,18 @@
+description: "Restores previously saved gems."
+
+parameters:
+  cache_version:
+    description: "Cache key (example \"v2\"). Could be used to invalidate cache."
+    type: string
+  cache_modifier:
+    description: "Optional cache modifier. Useful to create several caches for the same dependencies file."
+    type: string
+    default: ""
+  gemlock_file:
+    description: "Path to the Gemfile.lock file that defines all gems and their versions."
+    type: string
+
+steps:
+  - restore_cache:
+      name: Restore gems cache
+      key: << parameters.cache_version >>-<< parameters.cache_modifier >>-gems-{{ checksum << parameters.gemlock_file >> }}
