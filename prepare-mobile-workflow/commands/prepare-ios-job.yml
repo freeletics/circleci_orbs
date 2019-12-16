@@ -21,6 +21,9 @@ parameters:
   bundler_path:
     description: "Path to the bundler gems installation directory."
     type: string
+  bundler_version:
+    description: "Bundler version to install."
+    type: string
 
 steps:
   - attach_workspace:
@@ -30,7 +33,7 @@ steps:
       command: |
         echo 'PATH="$(ruby -e '\''puts Gem.user_dir'\'')/bin:$PATH"' >> $BASH_ENV
         source $BASH_ENV
-        gem install --user-install bundler
+        gem install --user-install bundler --version << parameters.bundler_version >>
   - sync-gems-native-extensions:
       cache_version: << parameters.native_extensions_cache_version >>
       native-platform: << parameters.native-platform >>
