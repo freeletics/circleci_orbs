@@ -29,11 +29,11 @@ parameters:
   ruby_version:
     description: "Version of ruby to use."
     type: string
-    default: "2.5"
+    default: "2.6"
   bundler_path:
     description: "Path to store installed gems, default to 'vendor/bundle/<ruby-version>'"
     type: string
-    default: vendor/bundle/2.5
+    default: vendor/bundle/2.6
   bundler_version:
     description: "Bundler version to use."
     type: string
@@ -62,7 +62,10 @@ steps:
       gemlock_file: << parameters.gemlock_file >>
   - run:
       name: Install bundler
-      command: gem install bundler
+      command: |
+            echo 'PATH="$(ruby -e '\''puts Gem.user_dir'\'')/bin:$PATH"' >> $BASH_ENV
+            source $BASH_ENV
+            gem install --user-install bundler --version $BUNDLER_VERSION
   - steps: << parameters.sync_dependencies >>
   - save-gems-cache:
       cache_version: << parameters.gem_cache_version >>
