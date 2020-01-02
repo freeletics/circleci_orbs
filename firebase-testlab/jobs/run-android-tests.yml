@@ -25,7 +25,7 @@ parameters:
       By default, it uses dummy apk file, that allows to run tests for android libraries.
     type: string
     default: .circleci/dummy.apk
-  tests_apk_path:
+  test_apk_path:
     description: |
       Path to assembled android tests apk relative to working directory.
     type: string
@@ -50,7 +50,7 @@ steps:
         gcloud auth activate-service-account  --key-file=/tmp/google_service_account.json
         gcloud config set project << parameters.firebase_project >>
         yq w -i << parameters.flank_configuration >> gcloud.app << parameters.app_apk_path >>
-        yq w -i << parameters.flank_configuration >> gcloud.test << parameters.tests_apk_path >>
+        yq w -i << parameters.flank_configuration >> gcloud.test << parameters.test_apk_path >>
         flank4 firebase test android run -c << parameters.flank_configuration >>
   - store_test_results:
       path: ./results
