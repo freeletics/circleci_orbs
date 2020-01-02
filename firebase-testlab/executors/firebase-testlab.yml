@@ -6,7 +6,7 @@ parameters:
   image_tag:
     description: Image tag to pull for execution
     type: string
-    default: "2.0.0"
+    default: "3.0.0"
 resource_class: small
 working_directory: << parameters.working_directory >>
 docker:
