@@ -62,7 +62,7 @@ steps:
       gemlock_file: << parameters.gemlock_file >>
   - run:
       name: Install bundler
-      command: gem install bundler
+      command: gem install bundler --version << parameters.bundler_version >>
   - steps: << parameters.sync_dependencies >>
   - save-gems-cache:
       cache_version: << parameters.gem_cache_version >>
