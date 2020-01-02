@@ -1,0 +1,13 @@
+parameters:
+  working_directory:
+    description: Executor working directory
+    type: string
+    default: /home/circleci/repo
+  image_tag:
+    description: Image tag to pull for execution
+    type: string
+    default: "2.0.0"
+resource_class: small
+working_directory: << parameters.working_directory >>
+docker:
+  - image: freeletics/circleci_android_other:<< parameters.image_tag >>

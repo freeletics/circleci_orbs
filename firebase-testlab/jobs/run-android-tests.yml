@@ -1,0 +1,56 @@
+description: |
+  Runs Android instrumentation tests on Firebase TestLab.
+  This job expects GCLOUD_SERVICE_ACCOUNT_JSON with Google cloud credentials json to be available in job environment variables.
+
+parameters:
+  working_directory:
+    type: string
+    default: /home/circleci/repo
+  firebase_project:
+    description: Use this Firebase project to run tests
+    type: string
+  flank_configuration:
+    description: Path to flank configuration relative to working directory
+    type: string
+
+  job_no_output_timeout:
+    description: |
+      How long CirleCI could wait for job output.
+      Default is taken from https://cloud.google.com/sdk/gcloud/reference/firebase/test/android/run --timeout parameter value.
+    type: string
+    default: "15m"
+  app_apk_path:
+    description: |
+      Path to the assembled application apk, relative to working directory.
+      By default, it uses dummy apk file, that allows to run tests for android libraries.
+    type: string
+    default: .circleci/dummy.apk
+  tests_apk_path:
+    description: |
+      Path to assembled android tests apk relative to working directory.
+    type: string
+  add_test_configuration:
+    description: |
+      Steps to add apks and flank configuration to this job.
+      Prefer building apks themselves in a previous jobs.
+    type: steps
+
+executor:
+  name: firebase-testlab
+  working_directory: << parameters.working_directory >>
+
+steps:
+  - steps: << parameters.add_test_configuration >>
+  - run:
+      name: Integration Tests
+      no_output_timeout: << parameters.job_no_output_timeout >>
+      command: |
+        echo $GCLOUD_SERVICE_ACCOUNT_JSON > /tmp/google_service_account.json
+        export GOOGLE_APPLICATION_CREDENTIALS=/tmp/google_service_account.json
+        gcloud auth activate-service-account  --key-file=/tmp/google_service_account.json
+        gcloud config set project << parameters.firebase_project >>
+        yq w -i << parameters.flank_configuration >> gcloud.app << parameters.app_apk_path >>
+        yq w -i << parameters.flank_configuration >> gcloud.test << parameters.tests_apk_path >>
+        flank4 firebase test android run -c << parameters.flank_configuration >>
+  - store_test_results:
+      path: ./results

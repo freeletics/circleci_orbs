@@ -67,7 +67,6 @@ workflows:
             - "Gradle-publish major release"
 
       # Prepare mobile workflow
-            # Gradle publish
       - orb-tools/pack:
           name: Pack prepare-mobile-workflow
           source-dir: prepare-mobile-workflow/
@@ -115,3 +114,52 @@ workflows:
           release: major
           requires:
             - "Prepare-mobile-workflow major release"
+
+      # Firebase test lab
+      - orb-tools/pack:
+          name: Pack firebase-testlab
+          source-dir: firebase-testlab/
+          destination-orb-path: firebase-testlab-orb.yml
+          workspace-path: firebase-testlab-orb.yml
+          artifact-path: firebase-testlab-orb.yml
+          requires:
+            - orb-tools/lint
+      - orb-tools/publish-dev:
+          name: Publish firebase-testlab dev release
+          orb-name: freeletics/firebase-testlab
+          orb-path: workspace/firebase-testlab-orb.yml
+          requires:
+            - "Pack firebase-testlab"
+      - "Firebase-testlab patch release":
+          type: approval
+          requires:
+            - "Publish firebase-testlab dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish firebase-testlab patch release"
+          orb-name: freeletics/firebase-testlab
+          release: patch
+          requires:
+            - "Firebase-testlab patch release"
+      - "Firebase-testlab minor release":
+          type: approval
+          requires:
+            - "Publish firebase-testlab dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish firebase-testlab minor release"
+          orb-name: freeletics/firebase-testlab
+          release: minor
+          requires:
+            - "Firebase-testlab minor release"
+      - "Firebase-testlab major release":
+          type: approval
+          requires:
+            - "Publish firebase-testlab dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish firebase-testlab major release"
+          orb-name: freeletics/firebase-testlab
+          release: major
+          requires:
+            - "Firebase-testlab major release"
