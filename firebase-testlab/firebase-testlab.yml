@@ -1,0 +1,4 @@
+version: 2.1
+
+description: |
+  Provides executor and job to run instrumentation tests on Firebase TestLab.
