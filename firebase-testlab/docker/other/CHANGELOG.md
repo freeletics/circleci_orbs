@@ -9,7 +9,7 @@ It uses [semver](https://semver.org/) versioning.
   - Flank updated to `8.1.0` version
   - Yq updated tp `2.4.1` version
   - Google sdk version updated to `274.0.1`
-  - Image based on `alpine:11`
+  - Image based on `openjdk:8-jre-alpine`
 ### Added
   - CireleCI user to run commands under
   - `dummy.apk` file to run tests for android libraries

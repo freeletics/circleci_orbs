@@ -1,4 +1,4 @@
-FROM alpine:3.11
+FROM openjdk:8-jre-alpine
 
 # Installing google cloud and flank for firebase test lab
 ENV CLOUD_SDK_VERSION 274.0.1
@@ -9,7 +9,6 @@ ENV PATH /google-cloud-sdk/bin:/usr/local/bin:$PATH
 ADD files/flank.sh /usr/local/bin/flank
 
 RUN apk --no-cache add \
-        openjdk8-jre \
         curl \
         sudo \
         python \
@@ -49,5 +48,6 @@ CMD ["/bin/sh"]
 
 # Switching user can confuse Docker's idea of $HOME, so we set it explicitly
 ENV HOME /home/circleci
+ENV PATH /google-cloud-sdk/bin:/usr/local/bin:$PATH
 
 ADD --chown=circleci:circleci files/dummy.apk /home/circleci/dummy.apk
