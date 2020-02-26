@@ -1,5 +1,5 @@
 ARG SDK_TOOLS_IMAGE=freeletics/android-sdk-tools
-ARG JDK_IMAGE=openjdk:8u181
+ARG JDK_IMAGE=openjdk:8u242
 
 FROM ${SDK_TOOLS_IMAGE} as android-sdk-tools
 
