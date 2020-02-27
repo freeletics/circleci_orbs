@@ -11,15 +11,11 @@ parameters:
   image:
     description: Name of image to create. Defaults to a combination of $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME.
     type: string
-    default: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
+    default: ${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME}
   tag:
     description: Value for tag to use. Defaults to $CIRCLE_SHA1.
     type: string
     default: $CIRCLE_SHA1
-  registry:
-    description: Name of registry to use. Defaults to docker.io.
-    type: string
-    default: docker.io
   extra_build_args:
     description: >
       Extra flags to pass to kaniko/executor. For examples, see
@@ -47,7 +43,7 @@ parameters:
     type: boolean
     default: false
   deploy:
-    description: Whether or not to push image to a registry.
+    description: Whether or not to push image to the Docker image repository.
     type: boolean
     default: true
   tar_path:
@@ -64,7 +60,7 @@ steps:
       condition: <<parameters.check>>
       steps:
         - check:
-            registry: << parameters.registry >>
+            image_repository: << parameters.image >>
   - when:
       name: Run before_build lifecycle hook steps.
       condition: << parameters.before_build >>
@@ -75,7 +71,6 @@ steps:
       image: << parameters.image >>
       tag: << parameters.tag >>
       cache: << parameters.cache >>
-      registry: << parameters.registry >>
       extra_build_args: << parameters.extra_build_args >>
       deploy: << parameters.deploy >>
       tar_path: << parameters.tar_path >>

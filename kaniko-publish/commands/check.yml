@@ -4,10 +4,9 @@ description: |
     * check that $DOCKER_LOGIN and $DOCKER_PASSWORD environment variables are set
     * run docker login to ensure that you can push the built image
 parameters:
-  registry:
-    description: Name of registry to use. Defaults to docker.io.
+  image_repository:
+    description: Docker image repository to use.
     type: string
-    default: docker.io
 steps:
   - run:
       name: "kaniko-publish: Simulate Docker Login"
@@ -19,7 +18,7 @@ steps:
           fi
         }
 
-        if [ "<< parameters.registry >>" = "docker.io"]; then
+        if [ "<< parameters.image_repository >>" =~ "docker.io\/.*"]; then
           check_var "${DOCKER_LOGIN}"
           check_var "${DOCKER_PASSWORD}"
 
@@ -33,14 +32,15 @@ steps:
             }
           }
           JSON
-        elif [[ "<< parameters.registry >>" ~= "*." =~ [0-9]+\.dkr\.ecr\..*\.amazonaws\.com ]]; then
+        elif [[ "<< parameters.image_repository >>" =~ [0-9]+\.dkr\.ecr\..*\.amazonaws\.com\/.* ]]; then
           check_var "${AWS_ACCESS_KEY_ID}"
           check_var "${AWS_SECRET_ACCESS_KEY}"
 
           echo '{ "credsStore": "ecr-login" }' > /kaniko/.docker/config.json
         else
           cat \<< EOF
-            Docker Registry not yet supported, please fill an issue/feature request on GitHub or send a PR.
+            Docker Registry not yet supported for check command
+            Please fill an issue/feature request on GitHub or send a PR.
 
             Alternatively, you can disable this setting the check to false,
               and use the before_build parameter to configure your registry properly.
