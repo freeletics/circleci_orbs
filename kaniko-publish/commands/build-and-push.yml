@@ -20,10 +20,6 @@ parameters:
     description: Whether or not to cache layers of the Docker image being built
     type: boolean
     default: false
-  registry:
-    description: Name of registry to use. Defaults to docker.io.
-    type: string
-    default: docker.io
   extra_build_args:
     description: >
       Extra flags to pass to kaniko/executor. For examples, see
@@ -31,7 +27,7 @@ parameters:
     type: string
     default: ""
   deploy:
-    description: Whether or not to push image to a registry.
+    description: Whether or not to push image to a Docker image registry.
     type: boolean
     default: true
   tar_path:
@@ -46,7 +42,7 @@ steps:
         /kaniko/executor
         --dockerfile "<< parameters.dockerfile >>"
         --context "<< parameters.path >>"
-        --destination "<< parameters.registry >>/<< parameters.image >>:<< parameters.tag >>"
+        --destination "<< parameters.image >>:<< parameters.tag >>"
         --cache << parameters.cache >>
         <<^parameters.deploy>>
         --no-push
