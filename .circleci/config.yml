@@ -177,15 +177,15 @@ workflows:
       - orb-tools/pack:
           name: Pack kaniko-publish
           source-dir: kaniko-publish/
-          destination-orb-path: kaniko-publish-orb.yml
-          workspace-path: kaniko-publish-orb.yml
-          artifact-path: kaniko-publish-orb.yml
+          destination-orb-path: orb.yml
+          workspace-path: orb.yml
+          artifact-path: orb.yml
           requires:
             - orb-tools/lint
       - orb-tools/publish-dev:
           name: Publish kaniko-publish dev release
           orb-name: freeletics/kaniko-publish
-          orb-path: workspace/kaniko-publish-orb.yml
+          orb-path: workspace/orb.yml
           requires:
             - "Pack kaniko-publish"
       - "kaniko-publish patch release":

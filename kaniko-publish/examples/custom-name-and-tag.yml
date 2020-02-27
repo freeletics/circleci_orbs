@@ -1,0 +1,11 @@
+description: Build and Deploy image with a custom name and tag.
+usage:
+  version: 2.1
+  orbs:
+    kaniko-publish: freeletics/kaniko-publish@0.2.0
+  workflows:
+    build_and_publish_image:
+      jobs:
+        - kaniko-publish/publish:
+            image: my/image
+            tag: my_tag

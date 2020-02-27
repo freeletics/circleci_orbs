@@ -1,0 +1,85 @@
+executor: kaniko
+parameters:
+  dockerfile:
+    description: Name of dockerfile to use. Defaults to Dockerfile.
+    type: string
+    default: Dockerfile
+  path:
+    description: Path to the directory containing your Dockerfile and build context. Defaults to . (working directory).
+    type: string
+    default: $(pwd)
+  image:
+    description: Name of image to create. Defaults to a combination of $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME.
+    type: string
+    default: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
+  tag:
+    description: Value for tag to use. Defaults to $CIRCLE_SHA1.
+    type: string
+    default: $CIRCLE_SHA1
+  registry:
+    description: Name of registry to use. Defaults to docker.io.
+    type: string
+    default: docker.io
+  extra_build_args:
+    description: >
+      Extra flags to pass to kaniko/executor. For examples, see
+      https://github.com/GoogleContainerTools/kaniko#additional-flags
+    type: string
+    default: ""
+  after_checkout:
+    description: Optional steps to run after checking out the code.
+    type: steps
+    default: []
+  before_build:
+    description: Optional steps to run before building the docker image.
+    type: steps
+    default: []
+  after_build:
+    description: Optional steps to run after building the docker image.
+    type: steps
+    default: []
+  check:
+    description: Whether or not to run the check for Docker registry variables and configuration
+    type: boolean
+    default: true
+  cache:
+    description: Whether or not to cache layers of the Docker image being built
+    type: boolean
+    default: false
+  deploy:
+    description: Whether or not to push image to a registry.
+    type: boolean
+    default: true
+  tar_path:
+    description: Set this if you want to produce a container tarball when not deploying
+    type: string
+    default: ""
+steps:
+  - checkout
+  - when:
+      name: Run after_checkout lifecycle hook steps.
+      condition: << parameters.after_checkout >>
+      steps: << parameters.after_checkout >>
+  - when:
+      condition: <<parameters.check>>
+      steps:
+        - check:
+            registry: << parameters.registry >>
+  - when:
+      name: Run before_build lifecycle hook steps.
+      condition: << parameters.before_build >>
+      steps: << parameters.before_build >>
+  - build-and-push:
+      dockerfile: << parameters.dockerfile >>
+      path: << parameters.path >>
+      image: << parameters.image >>
+      tag: << parameters.tag >>
+      cache: << parameters.cache >>
+      registry: << parameters.registry >>
+      extra_build_args: << parameters.extra_build_args >>
+      deploy: << parameters.deploy >>
+      tar_path: << parameters.tar_path >>
+  - when:
+      name: Run after_build lifecycle hook steps.
+      condition: << parameters.after_build >>
+      steps: << parameters.after_build >>

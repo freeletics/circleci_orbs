@@ -1,0 +1,17 @@
+parameters:
+  working_directory:
+    description: Executor working directory
+    type: string
+    default: /home/circleci/repo
+  image_registry:
+    description: Docker image tag to pull for execution
+    type: string
+    default: glenathan/circleci-kaniko
+  image_tag:
+    description: Image tag to pull for execution
+    type: string
+    default: build-62
+resource_class: small
+working_directory: << parameters.working_directory >>
+docker:
+  - image: freeletics/circleci_android_other:<< parameters.image_tag >>

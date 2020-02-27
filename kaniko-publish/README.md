@@ -10,7 +10,7 @@ See https://github.com/freeletics/circleci_orbs/tree/master/kaniko-publish-orb f
 
 ```
 orbs:
-  kaniko-publish: glenjamin/kaniko-publish@0.0.1
+  kaniko-publish: freeletics/kaniko-publish@0.2.0
 
 workflows:
   flow:
