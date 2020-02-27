@@ -1,0 +1,13 @@
+description: >
+  Build, but don't publish, an image using the publish job.
+
+usage:
+  version: 2.1
+  orbs:
+    kaniko-publish: freeletics/kaniko-publish@0.2.0
+  workflows:
+    build_without_publishing:
+      jobs:
+        - kaniko-publish/publish:
+            deploy: false
+            tar_path: container.tar
