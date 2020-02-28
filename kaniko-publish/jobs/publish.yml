@@ -7,7 +7,7 @@ parameters:
   path:
     description: Path to the directory containing your Dockerfile and build context. Defaults to . (working directory).
     type: string
-    default: $(pwd)
+    default: $CIRCLE_WORKING_DIRECTORY
   image:
     description: Name of image to create. Defaults to a combination of $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME.
     type: string
