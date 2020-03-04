@@ -1,0 +1,53 @@
+description: Builds, tags and pushes a container image
+parameters:
+  dockerfile:
+    description: Name of dockerfile to use. Defaults to Dockerfile.
+    type: string
+    default: Dockerfile
+  path:
+    description: Path to the directory containing your Dockerfile and build context. Defaults to . (working directory).
+    type: string
+    default: $(pwd)
+  image:
+    description: Name of image to create. Defaults to a combination of $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME.
+    type: string
+    default: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
+  tag:
+    description: Value for tag to use. Defaults to $CIRCLE_SHA1.
+    type: string
+    default: $CIRCLE_SHA1
+  cache:
+    description: Whether or not to cache layers of the Docker image being built
+    type: boolean
+    default: false
+  extra_build_args:
+    description: >
+      Extra flags to pass to kaniko/executor. For examples, see
+      https://github.com/GoogleContainerTools/kaniko#additional-flags
+    type: string
+    default: ""
+  deploy:
+    description: Whether or not to push image to a Docker image registry.
+    type: boolean
+    default: true
+  tar_path:
+    description: Set this if you want to produce a container tarball when not deploying
+    type: string
+    default: ""
+steps:
+  - run:
+      name: "kaniko-publish: build and push container"
+      shell: /bin/sh -uxeo pipefail
+      command: >-
+        /kaniko/executor
+        --dockerfile "<< parameters.dockerfile >>"
+        --context "<< parameters.path >>"
+        --destination "<< parameters.image >>:<< parameters.tag >>"
+        --cache << parameters.cache >>
+        <<^parameters.deploy>>
+        --no-push
+        <</parameters.deploy>>
+        <<#parameters.tar_path>>
+        --tarPath "<< parameters.tar_path >>"
+        <</parameters.tar_path>>
+        << parameters.extra_build_args >>

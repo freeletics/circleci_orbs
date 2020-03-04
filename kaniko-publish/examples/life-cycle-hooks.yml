@@ -1,0 +1,24 @@
+description: |
+  Build and deploy an image with custom lifecycle hooks; before
+  checking out the code from the VCS repository, before building the
+  docker image, and after building the docker image.
+usage:
+  version: 2.1
+  orbs:
+    kaniko-publish: freeletics/kaniko-publish@0.2.0
+  workflows:
+    workflow_with_lifecycle:
+      jobs:
+        - kaniko-publish/publish:
+            after_checkout:
+              - run:
+                  name: Do this after checkout.
+                  command: echo "Did this after checkout"
+            before_build:
+              - run:
+                  name: Do this before the build.
+                  command: echo "Did this before the build"
+            after_build:
+              - run:
+                  name: Do this after the build.
+                  command: echo "Did this after the build"

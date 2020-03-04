@@ -1,0 +1,15 @@
+description: |
+  A standard docker workflow, where you are building an image with a
+  Dockerfile in the root of your repository, naming the image to be the
+  same name as your repository, and then pushing to the default docker
+  registry (at docker.io). Using the DOCKER_LOGIN set as default user
+
+usage:
+  version: 2.1
+  orbs:
+    kaniko-publish: freeletics/kaniko-publish@0.2.0
+
+  workflows:
+    build_and_publish_image:
+      jobs:
+        - kaniko-publish/publish

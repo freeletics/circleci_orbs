@@ -1,7 +1,7 @@
 FROM freeletics/android-sdk:1.3
 
 # Adding Android bundletool
-COPY files/bundletool-all-0.9.0.jar /usr/bin/bundletool.jar
+COPY files/bundletool-all-0.11.0.jar /usr/bin/bundletool.jar
 COPY files/bundletool.sh /usr/bin/bundletool.sh
 
 # Install Ruby

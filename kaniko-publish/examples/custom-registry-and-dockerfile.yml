@@ -1,0 +1,13 @@
+description: |
+  Build and Deploy image with a non standard Dockerfile and to a
+  custom registry.
+usage:
+  version: 2.1
+  orbs:
+    kaniko-publish: freeletics/kaniko-publish@0.2.0
+  workflows:
+    build_and_publish_image:
+      jobs:
+        - kaniko-publish/publish:
+            image: my.docker.registry/image
+            dockerfile: path/to/MyDockerFile

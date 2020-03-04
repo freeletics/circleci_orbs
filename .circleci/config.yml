@@ -41,6 +41,7 @@ workflows:
           name: "Publish gradle-publish patch release"
           orb-name: freeletics/gradle-publish
           release: patch
+          publish-version-tag: false
           requires:
             - "Gradle-publish patch release"
       - "Gradle-publish minor release":
@@ -52,6 +53,7 @@ workflows:
           name: "Publish gradle-publish minor release"
           orb-name: freeletics/gradle-publish
           release: minor
+          publish-version-tag: false
           requires:
             - "Gradle-publish minor release"
       - "Gradle-publish major release":
@@ -63,6 +65,7 @@ workflows:
           name: "Publish gradle-publish major release"
           orb-name: freeletics/gradle-publish
           release: major
+          publish-version-tag: false
           requires:
             - "Gradle-publish major release"
 
@@ -89,6 +92,7 @@ workflows:
       - orb-tools/dev-promote-prod:
           name: "Publish prepare-mobile-workflow patch release"
           orb-name: freeletics/prepare-mobile-workflow
+          publish-version-tag: false
           release: patch
           requires:
             - "Prepare-mobile-workflow patch release"
@@ -100,6 +104,7 @@ workflows:
       - orb-tools/dev-promote-prod:
           name: "Publish prepare-mobile-workflow minor release"
           orb-name: freeletics/prepare-mobile-workflow
+          publish-version-tag: false
           release: minor
           requires:
             - "Prepare-mobile-workflow minor release"
@@ -111,6 +116,7 @@ workflows:
       - orb-tools/dev-promote-prod:
           name: "Publish prepare-mobile-workflow major release"
           orb-name: freeletics/prepare-mobile-workflow
+          publish-version-tag: false
           release: major
           requires:
             - "Prepare-mobile-workflow major release"
@@ -138,6 +144,7 @@ workflows:
       - orb-tools/dev-promote-prod:
           name: "Publish firebase-testlab patch release"
           orb-name: freeletics/firebase-testlab
+          publish-version-tag: false
           release: patch
           requires:
             - "Firebase-testlab patch release"
@@ -149,6 +156,7 @@ workflows:
       - orb-tools/dev-promote-prod:
           name: "Publish firebase-testlab minor release"
           orb-name: freeletics/firebase-testlab
+          publish-version-tag: false
           release: minor
           requires:
             - "Firebase-testlab minor release"
@@ -160,6 +168,60 @@ workflows:
       - orb-tools/dev-promote-prod:
           name: "Publish firebase-testlab major release"
           orb-name: freeletics/firebase-testlab
+          publish-version-tag: false
           release: major
           requires:
             - "Firebase-testlab major release"
+
+      # Kaniko Publish
+      - orb-tools/pack:
+          name: Pack kaniko-publish
+          source-dir: kaniko-publish/
+          destination-orb-path: orb.yml
+          workspace-path: orb.yml
+          artifact-path: orb.yml
+          requires:
+            - orb-tools/lint
+      - orb-tools/publish-dev:
+          name: Publish kaniko-publish dev release
+          orb-name: freeletics/kaniko-publish
+          orb-path: workspace/orb.yml
+          requires:
+            - "Pack kaniko-publish"
+      - "kaniko-publish patch release":
+          type: approval
+          requires:
+            - "Publish kaniko-publish dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish kaniko-publish patch release"
+          orb-name: freeletics/kaniko-publish
+          publish-version-tag: false
+          release: patch
+          requires:
+            - "kaniko-publish patch release"
+      - "kaniko-publish minor release":
+          type: approval
+          requires:
+            - "Publish kaniko-publish dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish kaniko-publish minor release"
+          orb-name: freeletics/kaniko-publish
+          publish-version-tag: false
+          release: minor
+          requires:
+            - "kaniko-publish minor release"
+      - "kaniko-publish major release":
+          type: approval
+          requires:
+            - "Publish kaniko-publish dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish kaniko-publish major release"
+          orb-name: freeletics/kaniko-publish
+          publish-version-tag: false
+          release: major
+          requires:
+            - "kaniko-publish major release"
+
