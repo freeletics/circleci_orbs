@@ -1,4 +1,4 @@
-FROM freeletics/android-sdk:1.2
+FROM freeletics/android-sdk:1.3
 
 # Adding Android bundletool
 COPY files/bundletool-all-0.11.0.jar /usr/bin/bundletool.jar

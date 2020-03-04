@@ -5,7 +5,7 @@ Hosted at https://hub.docker.com/r/freeletics/android-sdk/
 ## Contents
 
 * OpenJDK 8
-* Android SDK tools 26.1.1
+* Android SDK command line tools 1.0.0
 * Android SDK license
 * Android SDK preview license
 * `ANDROID_HOME` env var is set
@@ -14,7 +14,6 @@ Hosted at https://hub.docker.com/r/freeletics/android-sdk/
 ## How to build
 
 ```bash
-docker build -t freeletics/android-sdk-tools sdk-tools
 docker build -t freeletics/android-sdk:<version-tag> .
 ```
 
