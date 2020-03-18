@@ -6,11 +6,11 @@ parameters:
   image_repository:
     description: Docker image tag to pull for execution
     type: string
-    default: glenathan/circleci-kaniko
+    default: freeletics/kaniko-executor
   image_tag:
     description: Image tag to pull for execution
     type: string
-    default: build-62
+    default: latest
 resource_class: small
 working_directory: << parameters.working_directory >>
 docker:
