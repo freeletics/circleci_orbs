@@ -5,6 +5,9 @@ parameters:
   working_directory:
     type: string
     default: /home/circleci/repo
+  gradle_user_home:
+    type: string
+    default: /home/circleci/.gradle
 resource_class: large
 docker:
   - image: freeletics/android-sdk:<< parameters.tag >>
@@ -13,3 +16,4 @@ environment:
   TERM: dumb
   JAVA_TOOL_OPTIONS: "-Xmx5g -XX:MaxMetaspaceSize=1g -XX:MaxRAMFraction=2"
   MAX_WORKERS: "4"
+  GRADLE_USER_HOME: << parameters.gradle_user_home >>
