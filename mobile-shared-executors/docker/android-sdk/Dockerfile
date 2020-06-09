@@ -1,7 +1,7 @@
 # First build stage
 # - download and unpack Android SDK tools
 # - add Android SDK license hashes
-FROM alpine:3.8 as android-sdk-tools
+FROM alpine:3.11.6 as android-sdk-tools
 
 # Android SDK location
 ARG android_home=/android-sdk
@@ -15,7 +15,7 @@ ARG sdk_license_preview="84831b9409646a918e30573bab4c9c91346d8abd\n"
 RUN echo -e ${sdk_license_preview} > "${android_home}/licenses/android-sdk-preview-license"
 
 # Download and install Android SDK
-ARG SDK_TOOLS_REVISION=6200805_latest
+ARG SDK_TOOLS_REVISION=6514223_latest
 ARG sdk_file=commandlinetools-linux-${SDK_TOOLS_REVISION}.zip
 RUN wget -q -O /tmp/${sdk_file} https://dl.google.com/android/repository/commandlinetools-linux-${SDK_TOOLS_REVISION}.zip
 RUN unzip -q /tmp/${sdk_file} -d ${android_home}
@@ -24,7 +24,7 @@ RUN unzip -q /tmp/${sdk_file} -d ${android_home}
 # Second build stage
 # - OpenJDK + Android SDK
 # - some utilities
-FROM openjdk:8u242
+FROM openjdk:8u252
 
 RUN apt-get update \
   && apt-get install -y \
