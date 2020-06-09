@@ -1,7 +1,7 @@
 parameters:
   tag:
     type: string
-    default: "1.3"
+    default: "1.4"
   working_directory:
     type: string
     default: /home/circleci/repo
