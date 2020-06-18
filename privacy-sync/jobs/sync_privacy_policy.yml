@@ -1,0 +1,51 @@
+description: |
+  Generates new privacy policy and invite terms and conditions files based on current Contentstack
+  content and outputs them to provided directories. Then create a new Github pull request to the repository.
+
+parameters:
+  privacy-dir:
+    type: string
+    description: |
+      Workdir relative path to privacy policy files output directory.
+  privacy-file-template:
+    type: string
+    description: |
+      Privacy file template. Usually should be "privacy", then file for english locale will be "privacy.en.html".
+  invite-dir:
+    type: string
+    description: |
+      Workdir relative path to friends invite terms and conditions output directory.
+  invite-file-template:
+    type: string
+    description: |
+      Invite term and conditions file template. Usually should be "invite_terms_and_conditions",
+      then file for english locale will be "invite_terms_and_conditions.en.html".
+  git-setup-steps:
+    type: steps
+    default: []
+    description: |
+      Additional steps to setup git client.
+
+executor:
+  name: privacy-sync
+steps:
+  - checkout
+  - steps: << parameters.git-setup-steps >>
+  - run:
+      name: Syncing privacy files
+      command: |
+        sync-privacy \
+        --privacyDir=<< parameters.privacy-dir >> \
+        --privacyFileTemplate=<< parameters.privacy-file-template >> \
+        --inviteDir=<< parameters.invite-dir >> \
+        --inviteFileTemplate=<< parameters.invite-file-template >>
+  - run:
+      name: Create new Pull Request
+      command: |
+        git checkout -b privacy/$CIRCLE_BUILD_NUM
+        git add -A
+        if [[ ! -z $(git status --porcelain) ]]; then
+          git commit -m "Update privacy policy to newer version."
+          git push origin privacy/$CIRCLE_BUILD_NUM
+          ./hub pull-request -b master -h privacy/$CIRCLE_BUILD_NUM -m "New privacy policy update" -l "privacy-policy"
+        fi
