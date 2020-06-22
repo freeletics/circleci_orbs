@@ -225,3 +225,54 @@ workflows:
           requires:
             - "kaniko-publish major release"
 
+      # Privacy Sync
+      - orb-tools/pack:
+          name: Pack privacy-sync
+          source-dir: privacy-sync/
+          destination-orb-path: orb.yml
+          workspace-path: orb.yml
+          artifact-path: orb.yml
+          requires:
+            - orb-tools/lint
+      - orb-tools/publish-dev:
+          name: Publish privacy-sync dev release
+          orb-name: freeletics/privacy-sync
+          orb-path: workspace/orb.yml
+          requires:
+            - "Pack privacy-sync"
+      - "privacy-sync patch release":
+          type: approval
+          requires:
+            - "Publish privacy-sync dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish privacy-sync patch release"
+          orb-name: freeletics/privacy-sync
+          publish-version-tag: false
+          release: patch
+          requires:
+            - "privacy-sync patch release"
+      - "privacy-sync minor release":
+          type: approval
+          requires:
+            - "Publish privacy-sync dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish privacy-sync minor release"
+          orb-name: freeletics/privacy-sync
+          publish-version-tag: false
+          release: minor
+          requires:
+            - "privacy-sync minor release"
+      - "privacy-sync major release":
+          type: approval
+          requires:
+            - "Publish privacy-sync dev release"
+          <<: *only_master_branch
+      - orb-tools/dev-promote-prod:
+          name: "Publish privacy-sync major release"
+          orb-name: freeletics/privacy-sync
+          publish-version-tag: false
+          release: major
+          requires:
+            - "privacy-sync major release"

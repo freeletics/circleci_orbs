@@ -1,0 +1,8 @@
+parameters:
+  tag:
+    type: string
+    default: "1.0"
+docker:
+  - image: freeletics/privacy-sync:<< parameters.tag >>
+resource_class: medium
+working_directory: /privacy-sync

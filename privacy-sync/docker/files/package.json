@@ -1,0 +1,13 @@
+{
+  "name": "privacy-policy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:freeletics/privacy-policy.git",
+  "author": "Freeletics",
+  "license": "MIT",
+  "dependencies": {
+    "html-pdf": "^2.2.0",
+    "node-fetch": "^2.6.0",
+    "minimist" : "^1.2.5"
+  }
+}
