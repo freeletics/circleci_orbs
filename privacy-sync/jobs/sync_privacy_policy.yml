@@ -25,6 +25,11 @@ parameters:
     default: []
     description: |
       Additional steps to setup git client.
+  base-branch:
+    type: string
+    default: master
+    description: |
+      Base branch for create pull request. Default to "master".
 
 executor:
   name: privacy-sync
@@ -47,5 +52,5 @@ steps:
         if [[ ! -z $(git status --porcelain) ]]; then
           git commit -m "Update privacy policy to newer version."
           git push origin privacy/$CIRCLE_BUILD_NUM
-          hub pull-request -b master -h privacy/$CIRCLE_BUILD_NUM -m "New privacy policy update" -l "privacy-policy"
+          hub pull-request -b << parameters.base-branch >> -h privacy/$CIRCLE_BUILD_NUM -m "New privacy policy update" -l "privacy-policy"
         fi
