@@ -1,4 +1,4 @@
-FROM node:14.4-alpine3.12
+FROM node:14.4-buster-slim
 
 ARG hub_version=2.14.2
 
@@ -10,8 +10,12 @@ ADD files/yarn.lock yarn.lock
 
 RUN yarn install && rm -R /tmp/*
 
-# Adding Github hub command
-RUN apk add --no-cache ca-certificates tar git libc6-compat && \
+# Adding Github hub command and required dependencies
+RUN apt-get update && \
+    apt-get install -y ca-certificates tar git openssh-client wget gpg && \
+    rm -Rf /var/lib/apt && \
+    rm -Rf /var/log && \
+    rm -Rf /var/cache && \
     wget -O hub.tgz https://github.com/github/hub/releases/download/v${hub_version}/hub-linux-amd64-${hub_version}.tgz && \
     tar zxv -f hub.tgz --strip-components=2 hub-linux-amd64-${hub_version}/bin/hub && \
     mv hub /usr/local/bin/hub && \
