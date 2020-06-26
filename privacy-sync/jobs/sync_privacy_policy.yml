@@ -30,6 +30,11 @@ parameters:
     default: master
     description: |
       Base branch for create pull request. Default to "master".
+  pr-labels:
+    type: string
+    default: privacy-policy
+    description: |
+      Comma separated labels to be added to created pull request. Default is "privacy-policy".
 
 executor:
   name: privacy-sync
@@ -52,5 +57,5 @@ steps:
         if [[ ! -z $(git status --porcelain) ]]; then
           git commit -m "Update privacy policy to newer version."
           git push origin privacy/$CIRCLE_BUILD_NUM
-          hub pull-request -b << parameters.base-branch >> -h privacy/$CIRCLE_BUILD_NUM -m "New privacy policy update" -l "privacy-policy"
+          hub pull-request -b << parameters.base-branch >> -h privacy/$CIRCLE_BUILD_NUM -m "New privacy policy update" -l << parameters.pr-labels >>
         fi
