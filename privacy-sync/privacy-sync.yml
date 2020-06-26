@@ -4,4 +4,4 @@ description: |
   Contains job to pull latest privacy policy from Contentstack and generate html files for different languages based on content.
   Executor expect two environmental variables available to access Contentstack:
     - CONTENTSTACK_ACCESS_TOKEN
-    - CONTENTSTACK_API_TOKEN
+    - CONTENTSTACK_API_KEY
