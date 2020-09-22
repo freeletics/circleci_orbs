@@ -5,12 +5,15 @@ parameters:
   working_directory:
     type: string
     default: /home/circleci/home
+  gradle_user_home:
+    type: string
+    default: /home/circleci/.gradle
 resource_class: large
 docker:
   - image: freeletics/android-sdk-fastlane:<< parameters.tag >>
 working_directory: << parameters.working_directory >>
 environment:
   TERM: dumb
-  JAVA_TOOL_OPTIONS: "-Xmx5g -XX:MaxMetaspaceSize=1g -XX:MaxRAMFraction=2"
-  MAX_WORKERS: "4"
   FASTLANE_SKIP_UPDATE_CHECK: true
+  JAVA_TOOL_OPTIONS: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:-PreferContainerQuotaForCPUCount"
+  GRADLE_USER_HOME: << parameters.gradle_user_home >>
