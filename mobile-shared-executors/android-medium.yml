@@ -14,6 +14,5 @@ docker:
 working_directory: << parameters.working_directory >>
 environment:
   TERM: dumb
-  JAVA_TOOL_OPTIONS: "-Xmx2g -XX:MaxMetaspaceSize=512m -XX:MaxRAMFraction=2"
-  MAX_WORKERS: "2"
+  JAVA_TOOL_OPTIONS: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:-PreferContainerQuotaForCPUCount"
   GRADLE_USER_HOME: << parameters.gradle_user_home >>

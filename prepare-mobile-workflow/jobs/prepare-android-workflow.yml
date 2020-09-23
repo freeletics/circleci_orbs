@@ -39,7 +39,7 @@ parameters:
     default: /home/circleci/repo
 
 executor:
-  name: android-large
+  name: android-medium-plus
   gradle_user_home: << parameters.gradle_user_home >>
   working_directory: << parameters.working_directory >>
 
