@@ -4,7 +4,7 @@ parameters:
     default: "1.7"
   working_directory:
     type: string
-    default: /home/circleci/home
+    default: /home/circleci/repo
   gradle_user_home:
     type: string
     default: /home/circleci/.gradle
