@@ -1,3 +1,8 @@
 resource_class: medium
 macos:
-      xcode: 11.3.1
+  parameters:
+    resource_class:
+      type: string
+      default: medium
+  macos:
+    xcode: 11.7.0
