@@ -5,7 +5,7 @@ Hosted at https://hub.docker.com/r/freeletics/android-sdk/
 ## Contents
 
 * OpenJDK 8
-* Android SDK command line tools 1.0.0
+* Android SDK command line tools 3.0
 * Android SDK license
 * Android SDK preview license
 * `ANDROID_HOME` env var is set
