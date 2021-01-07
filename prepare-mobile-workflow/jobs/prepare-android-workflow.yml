@@ -30,18 +30,16 @@ parameters:
     description: "Optional steps to perform after checkout, but before saving to workspace."
     type: steps
     default: []
+  executor:
+    description: "The executor to run this job on."
+    type: executor
   gradle_user_home:
     description: "Path to Gradle user home directory."
     type: string
     default: "~/.gradle"
-  working_directory:
-    type: string
-    default: /home/circleci/repo
 
-executor:
-  name: android-medium-plus
+executor: << parameters.executor >>
   gradle_user_home: << parameters.gradle_user_home >>
-  working_directory: << parameters.working_directory >>
 
 steps:
   - checkout-from-git-cache:
