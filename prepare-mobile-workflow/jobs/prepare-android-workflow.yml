@@ -34,12 +34,11 @@ parameters:
     description: "The executor to run this job on."
     type: executor
   gradle_user_home:
-    description: "Path to Gradle user home directory."
+    description: "Path to Gradle user home directory. Make sure this matches the executor."
     type: string
     default: "~/.gradle"
 
 executor: << parameters.executor >>
-  gradle_user_home: << parameters.gradle_user_home >>
 
 steps:
   - checkout-from-git-cache:
