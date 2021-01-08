@@ -17,7 +17,7 @@ ARG CMDLINE_TOOLS_REVISION=6858069_latest # 3.0
 ARG sdk_file=commandlinetools-linux-${CMDLINE_TOOLS_REVISION}.zip
 RUN wget -q -O /tmp/${sdk_file} https://dl.google.com/android/repository/${sdk_file}
 RUN unzip -qo /tmp/${sdk_file} -d ${android_home}/cmdline-tools
-RUN mv ${android_home}/cmdline-tools/cmdline-tools ${android_home}/cmdline-tools/lates
+RUN mv ${android_home}/cmdline-tools/cmdline-tools ${android_home}/cmdline-tools/latest
 
 # Second build stage
 # - OpenJDK + Android SDK
@@ -61,5 +61,5 @@ COPY --chown=circleci:circleci --from=android-sdk-tools /android-sdk ${android_h
 
 # Set environmental variables
 ENV ANDROID_HOME ${android_home}
-ENV PATH=${ANDROID_HOME}/emulator:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${PATH}
+ENV PATH=${ANDROID_HOME}/emulator:${ANDROID_HOME}/cmdline-tools/latest:${ANDROID_HOME}/platform-tools:${PATH}
 ENV TERM dumb
