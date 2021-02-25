@@ -18,7 +18,7 @@ parameters:
   gemlock_file:
     description: "Path to the Gemfile.lock file that defines all gem dependencies and their versions."
     type: string
-    default: "Gemfile.lock"
+    default: '"Gemfile.lock"'
   sync_dependencies:
     description: "Steps to sync gem dependencies."
     type: steps
