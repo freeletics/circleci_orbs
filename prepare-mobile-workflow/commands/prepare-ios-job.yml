@@ -1,29 +1,33 @@
 description: |
-  Prepares ios job later in a workflow: attaches workspace, restore caches.
-  Assumes executor already exposes BUNDLER_VERSION and BUNDLE_PATH env variables
+  Prepares single job in a iOS workflow: attaches workspace, restore caches.
 
 parameters:
   native_extensions_cache_version:
     description: "Cache key (example \"v2\"). Could be used to invalidate cache."
     type: string
+    default: "v7"
   native-platform:
     description: |
       Ruby Native platform. For example, linux 64bit will be "x86_64-linux".
       To get your current platform, execute "bundle platform"
     type: string
+    default: universal-darwin-19
   native_extensions_cache_modifier:
     description: "Optional cache modifier. Useful to create several caches for the same dependencies file."
     type: string
-    default: ""
+    default: "ios"
   gemlock_file:
     description: "Path to the Gemfile.lock file that defines all gems and their versions."
     type: string
+    default: "Gemfile.lock"
   bundler_path:
-    description: "Path to the bundler gems installation directory."
+    description: "Path to store installed gems, default to 'vendor/bundle/<ruby-version>'"
     type: string
+    default: vendor/bundle/2.7
   bundler_version:
     description: "Bundler version to install."
     type: string
+    default: "2.2.8"
 
 steps:
   - attach_workspace:
@@ -31,9 +35,8 @@ steps:
   - run:
       name: Install bundler
       command: |
-        echo 'PATH="$(ruby -e '\''puts Gem.user_dir'\'')/bin:$PATH"' >> $BASH_ENV
-        source $BASH_ENV
         gem install --user-install bundler --version << parameters.bundler_version >>
+        bundle config path << parameters.bundler_path >>
   - sync-gems-native-extensions:
       cache_version: << parameters.native_extensions_cache_version >>
       native-platform: << parameters.native-platform >>

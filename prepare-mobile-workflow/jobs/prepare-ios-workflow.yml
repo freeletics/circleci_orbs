@@ -4,20 +4,21 @@ description: |
 
 parameters:
   git_cache_version:
-    description: "Git cache key (example \"v2\"). Could be used to invalidate cache."
+    description: "Git cache key (example \"v6\"). Could be used to invalidate cache."
     type: string
-    default: "v2"
+    default: "v6"
   gem_cache_version:
-    description: "Gem cache key (example \"v2\"). Could be used to invalidate cache."
+    description: "Gem cache key (example \"v14\"). Could be used to invalidate cache."
     type: string
-    default: "v3"
+    default: "v14"
   cache_modifier:
     description: "Optional caches modifier. Useful to create several caches for the same dependencies file."
     type: string
-    default: ""
+    default: "ios"
   gemlock_file:
     description: "Path to the Gemfile.lock file that defines all gem dependencies and their versions."
     type: string
+    default: "Gemfile.lock"
   sync_dependencies:
     description: "Steps to sync gem dependencies."
     type: steps
@@ -29,15 +30,15 @@ parameters:
   ruby_version:
     description: "Version of ruby to use."
     type: string
-    default: "2.6"
+    default: "2.7.0"
   bundler_path:
     description: "Path to store installed gems, default to 'vendor/bundle/<ruby-version>'"
     type: string
-    default: vendor/bundle/2.6
+    default: vendor/bundle/2.7
   bundler_version:
-    description: "Bundler version to use."
+    description: "Bundler version to install."
     type: string
-    default: "2.0.2"
+    default: "2.2.8"
   working_directory:
     type: string
     default: /home/circleci/repo
@@ -63,9 +64,8 @@ steps:
   - run:
       name: Install bundler
       command: |
-            echo 'PATH="$(ruby -e '\''puts Gem.user_dir'\'')/bin:$PATH"' >> $BASH_ENV
-            source $BASH_ENV
-            gem install --user-install bundler --version $BUNDLER_VERSION
+            gem install --user-install bundler --version << parameters.bundler_version >>
+            bundle config path << parameters.bundler_path >>
   - steps: << parameters.sync_dependencies >>
   - save-gems-cache:
       cache_version: << parameters.gem_cache_version >>
