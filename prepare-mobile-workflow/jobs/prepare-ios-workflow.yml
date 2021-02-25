@@ -63,9 +63,11 @@ steps:
       gemlock_file: << parameters.gemlock_file >>
   - run:
       name: Install bundler
+      # PATH -> Prevent the warning "You don't have /Users/distiller/.gem/ruby/2.7.0/bin in your PATH, gem executables will not run.""
       command: |
+            echo 'PATH="$(ruby -e '\''puts Gem.user_dir'\'')/bin:$PATH"' >> $BASH_ENV
+            source $BASH_ENV
             gem install --user-install bundler --version << parameters.bundler_version >>
-            bundle config path << parameters.bundler_path >>
   - steps: << parameters.sync_dependencies >>
   - save-gems-cache:
       cache_version: << parameters.gem_cache_version >>
