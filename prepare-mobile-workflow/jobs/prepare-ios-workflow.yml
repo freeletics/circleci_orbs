@@ -67,7 +67,7 @@ steps:
       command: |
             echo 'PATH="$(ruby -e '\''puts Gem.user_dir'\'')/bin:$PATH"' >> $BASH_ENV
             source $BASH_ENV
-            gem install --user-install bundler --version << parameters.bundler_version >>
+            gem install bundler --version << parameters.bundler_version >>
   - steps: << parameters.sync_dependencies >>
   - save-gems-cache:
       cache_version: << parameters.gem_cache_version >>
