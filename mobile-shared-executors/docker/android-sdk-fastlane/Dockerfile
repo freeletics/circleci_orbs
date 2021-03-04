@@ -21,3 +21,5 @@ ADD files/Gemfile Gemfile
 RUN sudo gem install -g Gemfile && \
     sudo gem cleanup && \
     sudo rm -rf /usr/lib/ruby/gems/*/cache/*
+
+ENV FASTLANE_SKIP_UPDATE_CHECK true
