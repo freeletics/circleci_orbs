@@ -13,7 +13,7 @@ steps:
   # remove remote branches that don't exist anymore in remote
   - run:
       name: "Prune remote branches"
-      command: git fetch --prune 
+      command: git fetch --prune
   # remove unreachable objects from git
   - run:
       name: "Prune remote branches"
