@@ -4,7 +4,7 @@ Hosted at https://hub.docker.com/r/freeletics/android-sdk/
 
 ## Contents
 
-* OpenJDK 8
+* OpenJDK 15.0.2
 * Android SDK command line tools 3.0
 * Android SDK license
 * Android SDK preview license
