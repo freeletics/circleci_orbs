@@ -10,6 +10,14 @@ parameters:
 steps:
   - checkout-from-git-cache:
       cache_version: << parameters.cache_version >>
+  # remove remote branches that don't exist anymore in remote
+  - run:
+      name: "Prune remote branches"
+      command: git fetch --prune
+  # remove unreachable objects from git
+  - run:
+      name: "Remove unreachable git objects"
+      command: git gc
   - save_cache:
       key: << parameters.cache_version >>-git-cache-master-{{ .Revision }}
       paths:
