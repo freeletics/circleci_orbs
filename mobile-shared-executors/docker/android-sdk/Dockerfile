@@ -22,7 +22,7 @@ RUN mv ${android_home}/cmdline-tools/cmdline-tools ${android_home}/cmdline-tools
 # Second build stage
 # - OpenJDK + Android SDK
 # - some utilities
-FROM openjdk:11.0.9.1-jdk
+FROM openjdk:15.0.2-jdk-slim
 
 RUN apt-get update \
   && apt-get install -y \
