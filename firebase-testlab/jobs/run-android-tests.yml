@@ -29,18 +29,14 @@ parameters:
     description: |
       Path to assembled android tests apk relative to working directory.
     type: string
-  add_test_configuration:
-    description: |
-      Steps to add apks and flank configuration to this job.
-      Prefer building apks themselves in a previous jobs.
-    type: steps
 
 executor:
   name: firebase-testlab
   working_directory: << parameters.working_directory >>
 
 steps:
-  - steps: << parameters.add_test_configuration >>
+  - attach_workspace:
+      root: .
   - run:
       name: Integration Tests
       no_output_timeout: << parameters.job_no_output_timeout >>
